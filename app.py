@@ -73,7 +73,7 @@ st.markdown(
   --latin:"Cormorant Garamond",Georgia,serif;
 }
 .stApp { background: radial-gradient(ellipse 90% 50% at 50% 0%, #24403F 0%, transparent 70%), var(--night); }
-.stApp, .stApp p, .stApp span, .stApp label { color: var(--mist); font-family: var(--sans); }
+.stApp, .stApp p, .stApp label, .stApp span:not([data-testid="stIconMaterial"]) { color: var(--mist); font-family: var(--sans); }
 .block-container { max-width: 980px; padding-top: 2.2rem; }
 header[data-testid="stHeader"] { background: transparent; }
 .mf-head { text-align:center; margin-bottom: 1.2rem; }
