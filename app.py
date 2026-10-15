@@ -15,7 +15,8 @@ from pathlib import Path
 import streamlit as st
 
 BASE = Path(__file__).parent
-CARD_DIR = BASE / "cards"
+# 圖片可放在 cards/ 資料夾，或直接放在 app.py 旁邊
+CARD_DIR = BASE / "cards" if (BASE / "cards" / "back.jpg").exists() else BASE
 
 st.set_page_config(page_title="念流．心境 抽牌", page_icon="🎴", layout="centered")
 
@@ -75,12 +76,10 @@ st.markdown(
 .stApp, .stApp p, .stApp span, .stApp label { color: var(--mist); font-family: var(--sans); }
 .block-container { max-width: 980px; padding-top: 2.2rem; }
 header[data-testid="stHeader"] { background: transparent; }
-
 .mf-head { text-align:center; margin-bottom: 1.2rem; }
 .mf-eyebrow { font-family:var(--latin); letter-spacing:.32em; color:var(--gold-dim); font-size:15px; text-transform:uppercase; }
 .mf-title { font-family:var(--serif); font-weight:700; color:var(--gold); font-size:clamp(32px,6vw,46px); letter-spacing:.18em; margin:.2rem 0; }
 .mf-lede { color:var(--mist-dim); font-size:15px; max-width:34em; margin:0 auto; }
-
 .mf-table { background:linear-gradient(180deg,var(--table),#1A2C30); border:1px solid var(--edge);
   border-radius:24px; padding:28px 16px 20px; text-align:center; }
 .mf-fan { position:relative; height:230px; max-width:460px; margin:0 auto; }
@@ -91,12 +90,10 @@ header[data-testid="stHeader"] { background: transparent; }
   50% { transform:rotate(calc(var(--r) * -0.6)) translateY(-26px); } }
 .mf-breath { font-family:var(--serif); color:var(--gold); font-size:24px; letter-spacing:.35em; min-height:2em; margin-top:14px; }
 .mf-prompt { color:var(--mist); margin-top:14px; }
-
 .mf-card { perspective:1600px; }
 .mf-card img { width:100%; border-radius:14px; box-shadow:0 24px 50px rgba(0,0,0,.45); display:block; }
 .mf-card.flip img { animation: mfFlip 1.1s cubic-bezier(.65,0,.35,1) both; }
 @keyframes mfFlip { 0% { transform:rotateY(90deg) scale(.92); opacity:.2; } 100% { transform:rotateY(0) scale(1); opacity:1; } }
-
 .mf-meaning { background:var(--paper); border-radius:18px; padding:28px 26px; outline:3px solid var(--suit);
   outline-offset:-12px; box-shadow:0 24px 50px rgba(0,0,0,.35); }
 .mf-meaning.rise { animation: mfRise .7s .6s both; }
@@ -116,17 +113,14 @@ header[data-testid="stHeader"] { background: transparent; }
 .mf-quote { background:var(--tint); border-radius:12px; padding:14px 16px; margin-top:16px;
   font-family:var(--serif) !important; font-size:19px; text-align:center; }
 .mf-art p { font-size:14px; color:#5E574C !important; }
-
 .mf-h2 { font-family:var(--serif); color:var(--gold); font-size:24px; letter-spacing:.16em; text-align:center; margin:2.4rem 0 .6rem; }
 .mf-thumb { font-size:13px; color:var(--mist-dim); text-align:center; }
-
 div.stButton > button { border-radius:999px; letter-spacing:.15em; border:1px solid var(--gold); }
 div.stButton > button[kind="primary"] { background:var(--gold); color:var(--night); font-weight:500; }
 div.stButton > button[kind="primary"]:hover { background:#E8CC80; color:var(--night); }
 div.stButton > button[kind="secondary"] { background:transparent; color:var(--gold); }
 button[data-baseweb="tab"] p { color:var(--mist) !important; }
-@media (prefers-reduced-motion: reduce) { .mf-card.flip img, .mf-meaning.rise, .mf-fan.shuffle img { animation:none; } }
-</style>
+@media (prefers-reduced-motion: reduce) { .mf-card.flip img, .mf-meaning.rise, .mf-fan.shuffle img { animation:none; } }</style>
 """,
     unsafe_allow_html=True,
 )
