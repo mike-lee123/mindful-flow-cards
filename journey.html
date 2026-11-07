@@ -1,0 +1,574 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>念流心境旅程</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Noto+Sans+TC:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,500;1,500&display=swap">
+<style>
+/* Layout: one calm column, a path of six stations on top, each station one screen. Paper-and-ink world of the 念流．心境 deck. */
+:root {
+  --paper: #FAF6EC;
+  --paper-2: #F1EBDC;
+  --ink: #2B2A2E;
+  --ink-soft: #6A6560;
+  --line: #DDD4C2;
+  --spade: #6B5236;
+  --heart: #B4566A;
+  --diamond: #2F5F8A;
+  --club: #3C7A55;
+  --core: #9C7A2E;
+  --alert: #A33A2A;
+  --alert-bg: #F8E3DE;
+  --suit: var(--core);
+  --font-display: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+  --font-body: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  --font-latin: "Cormorant Garamond", Georgia, serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #17262A; --paper-2: #1F3337; --ink: #E6EDEA; --ink-soft: #8FA3A0; --line: #2C464B;
+    --spade: #C9A57E; --heart: #E494A6; --diamond: #8DB6DE; --club: #8CC4A0; --core: #D9B867;
+    --alert: #F0A090; --alert-bg: #3A2522; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #17262A; --paper-2: #1F3337; --ink: #E6EDEA; --ink-soft: #8FA3A0; --line: #2C464B;
+  --spade: #C9A57E; --heart: #E494A6; --diamond: #8DB6DE; --club: #8CC4A0; --core: #D9B867;
+  --alert: #F0A090; --alert-bg: #3A2522; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--paper); color: var(--ink); font-family: var(--font-body);
+  font-size: 16px; line-height: 1.7;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 12px 48px;
+}
+.wrap { max-width: 560px; margin: 0 auto; display: grid; gap: 20px; }
+header.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 8px; }
+.brand { display: grid; line-height: 1.2; }
+.brand b { font-family: var(--font-display); font-size: 22px; letter-spacing: .12em; }
+.brand span { font-family: var(--font-latin); font-style: italic; color: var(--ink-soft); font-size: 15px; letter-spacing: .08em; }
+.help { border: 1px solid var(--alert); color: var(--alert); background: transparent; border-radius: 999px; padding: 6px 14px; font: 500 14px var(--font-body); cursor: pointer; }
+.help:hover { background: var(--alert-bg); }
+
+/* station path */
+.path { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; position: relative; }
+.path::before { content: ""; position: absolute; left: 8%; right: 8%; top: 14px; border-top: 1px dashed var(--line); }
+.st { display: grid; justify-items: center; gap: 2px; position: relative; font-size: 12px; color: var(--ink-soft); }
+.st i { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-family: var(--font-display); font-size: 14px; background: var(--paper); border: 1px solid var(--line); }
+.st.done i { background: var(--paper-2); color: var(--ink); }
+.st.now i { background: var(--suit); border-color: var(--suit); color: var(--paper); }
+.st.now { color: var(--ink); font-weight: 500; }
+
+main#app { display: grid; gap: 20px; }
+h1, h2 { font-family: var(--font-display); font-weight: 700; text-wrap: balance; margin: 0; line-height: 1.35; }
+h1 { font-size: 28px; letter-spacing: .04em; }
+h2 { font-size: 22px; letter-spacing: .03em; }
+p { margin: 0; }
+.lead { color: var(--ink-soft); }
+.eyebrow { font-family: var(--font-latin); font-style: italic; color: var(--suit); font-size: 16px; letter-spacing: .1em; }
+.block { display: grid; gap: 10px; }
+.label { font-weight: 500; font-size: 15px; }
+.hint { font-size: 13px; color: var(--ink-soft); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1px solid var(--line); background: var(--paper); color: var(--ink); border-radius: 999px; padding: 7px 14px; font: 15px var(--font-body); cursor: pointer; }
+.chip[aria-pressed="true"] { border-color: var(--suit); background: var(--suit); color: var(--paper); }
+.weather { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.wx { display: grid; justify-items: center; gap: 4px; padding: 12px 6px; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); color: var(--ink); cursor: pointer; font: 15px var(--font-body); }
+.wx svg { width: 40px; height: 32px; stroke: var(--ink-soft); fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.wx[aria-pressed="true"] { border-color: var(--suit); box-shadow: inset 0 0 0 1px var(--suit); }
+.wx[aria-pressed="true"] svg { stroke: var(--suit); }
+
+.scale { display: grid; gap: 6px; }
+.scale-row { display: flex; align-items: center; gap: 12px; }
+.scale input[type=range] { flex: 1; accent-color: var(--suit); min-width: 0; }
+.scale output { font-family: var(--font-latin); font-size: 30px; width: 2.2ch; text-align: right; font-variant-numeric: tabular-nums; color: var(--suit); }
+.ends { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink-soft); }
+textarea { width: 100%; min-height: 72px; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; font: 15px var(--font-body); background: var(--paper); color: var(--ink); resize: vertical; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.btn { border: 0; border-radius: 999px; padding: 11px 22px; font: 500 16px var(--font-body); background: var(--suit); color: var(--paper); cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+.btn.quiet { background: transparent; color: var(--ink-soft); padding: 11px 8px; text-decoration: underline; text-underline-offset: 3px; }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--suit); outline-offset: 2px; }
+
+/* cards */
+.draw { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; perspective: 900px; }
+.card { aspect-ratio: 631 / 880; max-width: 100%; border: 0; padding: 0; background: none; cursor: pointer; position: relative; transform-style: preserve-3d; transition: transform .7s cubic-bezier(.2,.7,.2,1), opacity .4s; }
+.card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 10px; backface-visibility: hidden; box-shadow: 0 6px 18px -10px rgba(0,0,0,.45); }
+.card .front { transform: rotateY(180deg); }
+.card.flip { transform: rotateY(180deg); }
+.card.fade { opacity: .25; pointer-events: none; }
+.card:hover:not(.flip) { transform: translateY(-4px); }
+.reveal { display: grid; grid-template-columns: minmax(0, 150px) minmax(0, 1fr); gap: 16px; align-items: start; }
+.reveal img { width: 100%; border-radius: 10px; box-shadow: 0 8px 22px -12px rgba(0,0,0,.5); }
+.affirm { font-family: var(--font-display); font-size: 19px; line-height: 1.6; }
+.tag { display: inline-flex; gap: 6px; align-items: center; font-size: 13px; color: var(--suit); border: 1px solid var(--suit); border-radius: 999px; padding: 2px 10px; width: fit-content; }
+
+/* practice options */
+.paths { display: grid; gap: 10px; }
+.opt { text-align: left; display: grid; gap: 4px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--paper); color: var(--ink); cursor: pointer; font: 15px var(--font-body); }
+.opt b { font-family: var(--font-display); font-size: 18px; }
+.opt .meta { font-size: 13px; color: var(--ink-soft); }
+.opt[aria-pressed="true"] { border-color: var(--suit); box-shadow: inset 3px 0 0 var(--suit); }
+
+/* practice */
+.ring-wrap { display: grid; place-items: center; padding: 8px 0; }
+.ring { width: min(220px, 60vw); aspect-ratio: 1; max-width: 100%; border-radius: 50%; border: 1px solid var(--suit); display: grid; place-items: center; position: relative; }
+.ring::before { content: ""; position: absolute; inset: 14%; border-radius: 50%; background: var(--suit); opacity: .12; animation: tide 10s ease-in-out infinite; }
+.ring .time { font-family: var(--font-latin); font-size: 40px; font-variant-numeric: tabular-nums; position: relative; }
+@keyframes tide { 0%,100% { transform: scale(.82); } 50% { transform: scale(1.08); } }
+@media (prefers-reduced-motion: reduce) { .ring::before { animation: none; } .card { transition: none; } }
+.guide { font-family: var(--font-display); font-size: 20px; line-height: 1.7; min-height: 4.2em; text-align: center; text-wrap: balance; }
+.progress { height: 3px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.progress i { display: block; height: 100%; background: var(--suit); width: 0; transition: width 1s linear; }
+
+/* garden */
+.garden { border: 1px solid var(--line); border-radius: 16px; padding: 14px; display: grid; gap: 10px; background: var(--paper-2); }
+.garden svg { width: 100%; height: auto; display: block; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--ink-soft); }
+.legend span::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--c); margin-right: 5px; }
+.note { border-left: 3px solid var(--suit); padding: 4px 0 4px 12px; }
+
+/* safety */
+.safe { border: 1px solid var(--alert); background: var(--alert-bg); border-radius: 16px; padding: 18px; display: grid; gap: 12px; }
+.safe h2 { color: var(--alert); }
+.lines { display: grid; gap: 6px; }
+.line { display: grid; grid-template-columns: 7.5em 1fr; gap: 10px; align-items: baseline; }
+.line b { font-family: var(--font-latin); font-size: 24px; user-select: all; font-variant-numeric: tabular-nums; }
+.proto { font-size: 12px; color: var(--ink-soft); border-top: 1px solid var(--line); padding-top: 12px; }
+dialog { border: 0; border-radius: 18px; padding: 0; max-width: min(480px, calc(100vw - 32px)); background: var(--paper); color: var(--ink); }
+dialog::backdrop { background: rgba(0,0,0,.4); }
+dialog .safe { border-radius: 18px; }
+@media (max-width: 420px) { h1 { font-size: 24px; } .reveal { grid-template-columns: minmax(0, 110px) minmax(0, 1fr); } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><b>念流．心境</b><span>Mindful Flow · 心境旅程</span></div>
+    <button class="help" id="helpBtn" type="button">需要幫助</button>
+  </header>
+  <nav class="path" id="path" aria-label="旅程進度"></nav>
+  <main id="app" aria-live="polite"></main>
+  <p class="proto">原型示範：練習引導與推薦規則依《MBSR 適性練習矩陣》v0.3，文字待審。這不是醫療或心理治療，限 18 歲以上使用；緊急狀況請撥 110／119，想找人說說話請撥 1925。資料只存在這台裝置的瀏覽器中，你寫下的文字不會被保存。</p>
+</div>
+
+<dialog id="helpDlg">
+  <div class="safe">
+    <h2>需要幫助時</h2>
+    <p>如果你或身邊的人有立即的危險，請先撥打緊急電話。想找人說說話，這些專線都可以。</p>
+    <div class="lines" id="helpLines"></div>
+    <div class="actions"><button class="btn ghost" type="button" id="helpClose">回到旅程</button></div>
+  </div>
+</dialog>
+
+<script>
+const CARDS = __CARDS__;
+// 嵌入 Streamlit 時由 journey.py 設定：圖片位置、深色主題、自動高度
+const IMG = window.MF_IMG_BASE || "cards/";
+const EMBED = !!window.MF_EMBED;
+if (EMBED) document.documentElement.dataset.theme = "dark";
+const SUITS = {
+  spade: { sym: "♠", name: "根基．沉靜", plant: "stone" },
+  heart: { sym: "♥", name: "接納．慈悲", plant: "flower" },
+  diamond: { sym: "♦", name: "清明．轉化", plant: "crystal" },
+  club: { sym: "♣", name: "綻放．行動", plant: "sprout" },
+  core: { sym: "✦", name: "核心引導", plant: "star" },
+};
+const RESOURCES = [
+  ["110／119", "緊急危險", "生命有立即危險時"],
+  ["1925", "安心專線", "24 小時，免付費"],
+  ["1995", "生命線", "24 小時"],
+  ["1980", "張老師專線", "依服務時段"],
+];
+const WEATHER = [
+  { id: "sun", name: "晴朗", v: 2, svg: '<circle cx="20" cy="16" r="6"/><path d="M20 3v3M20 26v3M7 16h3M30 16h3M11 7l2 2M27 23l2 2M29 7l-2 2M13 23l-2 2"/>' },
+  { id: "cloud", name: "多雲", v: 4, svg: '<path d="M11 24h18a6 6 0 0 0 0-12 8 8 0 0 0-15-1 6 6 0 0 0-3 13z"/>' },
+  { id: "wind", name: "起風", v: 5, svg: '<path d="M4 11h20a4 4 0 1 0-4-4M4 17h28a4 4 0 1 1-4 4M4 23h14"/>' },
+  { id: "rain", name: "下雨", v: 5, svg: '<path d="M11 18h18a6 6 0 0 0 0-12 8 8 0 0 0-15-1 6 6 0 0 0-3 13z"/><path d="M13 23l-2 5M20 23l-2 5M27 23l-2 5"/>' },
+  { id: "storm", name: "雷雨", v: 7, svg: '<path d="M11 18h18a6 6 0 0 0 0-12 8 8 0 0 0-15-1 6 6 0 0 0-3 13z"/><path d="M21 19l-4 6h5l-3 6"/>' },
+  { id: "fog", name: "起霧", v: 4, svg: '<path d="M5 9h30M9 15h24M5 21h30M11 27h20"/>' },
+];
+// 情境 → 牌池、第一／第二選項（依矩陣「2 情境推薦」）
+const SITU = [
+  { id: "S01", name: "考試或評量", pool: [1, 2, 5, 29, 34], rec: ["M02", "M01"], ask: "想先穩定身體，還是整理思緒？" },
+  { id: "S02", name: "人際衝突", pool: [27, 14, 29, 43], rec: ["A03", "M05"], ask: "願意先停三分鐘，再決定怎麼回應嗎？" },
+  { id: "S03", name: "一直想同一件事", pool: [25, 4, 26, 31], rec: ["M03", "A02"], ask: "想先離開念頭，還是看看念頭？" },
+  { id: "S04", name: "很累、昏沉", pool: [45, 9, 11, 47], rec: ["M05", "A01"], ask: "比較想動一動，還是坐著看看？" },
+  { id: "S05", name: "身體緊繃", pool: [3, 8, 10, 45], rec: ["M04", "M05"], ask: "想靜靜觀察，還是用動作探索？" },
+  { id: "S06", name: "睡前停不下來", pool: [12, 2, 24, 50], rec: ["M04", "M03"], ask: "想把注意放在身體，還是聽聽周圍的聲音？" },
+  { id: "S07", name: "照顧家人好累", pool: [6, 10, 18, 20, 48], rec: ["M06", "M02"], ask: "現在有一分鐘，只屬於你自己嗎？" },
+  { id: "S08", name: "趕截止期限", pool: [1, 27, 39, 47], rec: ["A03", "M02"], ask: "現在需要暫停一下，還是回到手上的事？" },
+  { id: "S09", name: "低落、提不起勁", pool: [13, 6, 16, 22, 21], rec: ["M06", "M05"], ask: "願意先做一件很小的事嗎？" },
+  { id: "S10", name: "沒時間練習", pool: [11, 7, 40, 41], rec: ["M06", "M02"], ask: "今天有哪件固定會做的事，可以順便練習？" },
+  { id: "S00", name: "說不上來", pool: [49, 50, 24, 32], rec: ["M02", "M03"], ask: "想從身體開始，還是從聲音開始？" },
+];
+const PRACTICE = {
+  M01: { name: "呼吸覺察", times: [1, 3, 5], eyes: "睜眼閉眼都可以", desc: "注意呼吸，分心了就溫和回來。", breath: true,
+    steps: ["找一個舒服的姿勢，眼睛可以睜著，也可以輕輕閉上。", "不需要改變呼吸，只是注意空氣進來、出去。", "選一個最清楚的地方：鼻尖、胸口，或腹部。", "心跑走了很正常。發現的那一刻，就是覺察。", "溫和地，把注意帶回下一次呼吸。", "如果注意呼吸讓你不舒服，可以改成感受腳底。", "最後，感受整個身體坐在這裡的樣子。"] },
+  M02: { name: "腳底接地", times: [1, 3], eyes: "睜眼", desc: "感受腳底與地面，回到身體與此刻。",
+    steps: ["雙腳平放在地面，睜著眼睛就好。", "感受腳底和地面接觸的地方：壓力、溫度、鞋子的觸感。", "輕輕把重量移到左腳，再慢慢移回右腳。", "大地一直承接著你，不需要你用力。", "心跑到別的地方，回到腳底就好。", "也可以感受身體和椅子接觸的地方。", "此刻，你穩穩地在這裡。"] },
+  M03: { name: "聲音覺察", times: [3, 5], eyes: "睜眼閉眼都可以", desc: "聽聲音來去，從念頭裡鬆開一點。",
+    steps: ["讓耳朵打開，不需要去找特別的聲音。", "先聽遠的聲音，再聽近的聲音。", "聲音出現、停留、消失，你只需要知道它們在那裡。", "不必替聲音命名，也不必評價。", "念頭出現時，也可以把它當成一個聲音，聽它來，聽它走。", "最後，聽聽最安靜的那個地方。"] },
+  M04: { name: "簡短身體掃描", times: [5, 10], eyes: "睜眼閉眼都可以", desc: "從腳到頭，認識身體此刻的訊號。",
+    steps: ["坐著或躺著都可以，找一個舒服的姿勢。", "注意雙腳。有感覺就是有感覺，沒感覺也可以。", "慢慢往上：小腿、膝蓋、大腿。", "骨盆、腹部、背部。遇到不舒服的地方，可以跳過。", "胸口、肩膀、手臂、雙手。", "脖子、臉、頭頂。", "最後，感覺整個身體一起在這裡。"] },
+  M05: { name: "正念伸展", times: [3, 5, 10], eyes: "睜眼", desc: "用緩慢的動作，把注意帶回身體。",
+    steps: ["站著或坐著都可以，動作只做到舒服的範圍。", "吸氣時雙手慢慢往上，吐氣時慢慢放下。", "轉一轉肩膀，往前三圈，再往後三圈。", "頭輕輕傾向一側，感受脖子的伸展，再換另一側。", "不需要做得標準，只要知道身體正在動。", "停下來，感受動作之後身體的變化。"] },
+  M06: { name: "日常活動覺察", times: [1, 3, 5], eyes: "睜眼", desc: "把一件小事放慢，當成練習。",
+    steps: ["選一件正在做或馬上要做的小事：喝水、洗手、走路。", "放慢一點點速度。", "注意溫度、重量、聲音或氣味。", "心跑走了，就回到手上這件事。", "這件小事，現在就是你的練習。", "完成時，給自己一個小小的停頓。"] },
+  A01: { name: "視覺覺察", times: [1, 3], eyes: "睜眼", desc: "用眼睛看見此刻，作為安穩的錨點。",
+    steps: ["睜著眼睛，讓視線輕輕落在前方。", "找出三種顏色。", "找一個形狀，看看它的邊緣。", "注意光落在哪裡，影子在哪裡。", "不必評價看到的東西，只是看見。", "再看一次整個空間。"] },
+  A02: { name: "念頭標記", times: [3, 5], eyes: "睜眼閉眼都可以", desc: "給念頭一個名字，看它來去（MBCT 延伸）。",
+    steps: ["先感受身體坐在這裡。", "念頭出現時，輕輕在心裡說：「想法」。", "是擔心就說「擔心」，是計畫就說「計畫」。", "標記之後讓它自己走，回到聲音或身體。", "你是天空，念頭是飄過的雲。", "最後，回到身體坐在這裡的感覺。"] },
+  A03: { name: "STOP 暫停", times: [1, 3], eyes: "睜眼", desc: "停下、感受、觀察，再選擇怎麼做。",
+    steps: ["S 停下：手邊的事，先停下來。", "T 感受：感受一次呼吸，或感受腳底。", "O 觀察：此刻身體、念頭、情緒是什麼樣子？", "P 繼續：帶著這份覺察，選擇接下來怎麼做。", "不急著回應，也沒關係。"] },
+};
+// 9 個正念態度與牌卡（矩陣「3 正念態度」）
+const ATTITUDE_BY_CARD = { 49: "不評判", 39: "耐心", 32: "初心", 10: "信任", 50: "不強求", 13: "接納", 23: "放下", 41: "感恩", 18: "慷慨（慈悲）", 46: "慷慨（慈悲）" };
+const ATTITUDE_BY_SUIT = { spade: "信任", heart: "接納", diamond: "放下", club: "初心", core: "不評判" };
+const CRISIS = ["不想活", "想死", "自殺", "結束生命", "消失比較好", "消失算了", "傷害自己", "自殘", "活著沒意義", "活著沒有意義", "沒有我會比較好", "打我", "不敢回家", "今晚就結束"];
+const UNSURE = ["不想再撐", "撐不下去", "撐不住"];
+const DISSOC = ["不在自己身體", "感覺不到真實", "不真實"];
+const STATIONS = ["停", "覺", "抽", "練", "探", "收"];
+
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+};
+const fresh = () => ({ screen: "home", weather: null, before: 4, clarityBefore: 5, situ: null, time: 3, eyes: "any", note: "",
+  pool: [], picked: null, practice: null, mins: 3, after: null, clarityAfter: null, feel: null, diff: [], result: null });
+let S = fresh();
+let timer = null;
+const $ = (q) => document.querySelector(q);
+const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const card = (no) => CARDS.find((c) => c.no === no);
+const pad = (n) => String(n).padStart(2, "0");
+const setSuit = (s) => document.documentElement.style.setProperty("--suit", `var(--${s || "core"})`);
+
+function stationIdx() {
+  return { home: -1, weather: 0, context: 1, draw: 2, choose: 3, practice: 3, reflect: 4, harvest: 5 }[S.screen] ?? -1;
+}
+function renderPath() {
+  const i = stationIdx();
+  $("#path").innerHTML = STATIONS.map((s, k) =>
+    `<div class="st ${k < i ? "done" : ""} ${k === i ? "now" : ""}"><i>${s}</i><span>${["停一下", "看看情境", "抽一張牌", "練習", "回來看看", "收進花園"][k]}</span></div>`).join("");
+  $("#path").hidden = i < 0;
+}
+
+/* ---------- 花園 ---------- */
+function plantSVG(p, x, y, faint) {
+  const c = `var(--${p.suit})`;
+  const o = faint ? 0.35 : 1;
+  const k = SUITS[p.suit].plant;
+  let g = "";
+  if (k === "stone") g = `<ellipse cx="0" cy="-6" rx="13" ry="7" fill="${c}"/><ellipse cx="0" cy="-17" rx="9" ry="5.5" fill="${c}" opacity=".75"/><ellipse cx="0" cy="-25" rx="5.5" ry="3.5" fill="${c}" opacity=".55"/>`;
+  if (k === "flower") g = `<path d="M0 0V-18" stroke="var(--club)" stroke-width="2"/><g transform="translate(0,-24)">${[0, 72, 144, 216, 288].map((a) => `<ellipse rx="4.5" ry="8" transform="rotate(${a}) translate(0,-7)" fill="${c}" opacity=".85"/>`).join("")}<circle r="3.5" fill="var(--core)"/></g>`;
+  if (k === "crystal") g = `<path d="M0 -32 L9 -14 L0 0 L-9 -14 Z" fill="${c}" opacity=".85"/><path d="M0 -32 L0 0" stroke="var(--paper)" stroke-width="1" opacity=".6"/>`;
+  if (k === "sprout") g = `<path d="M0 0V-20" stroke="${c}" stroke-width="2.2"/><path d="M0 -12C-12 -14-14 -24-14 -26C-4 -26 0 -20 0 -14" fill="${c}"/><path d="M0 -18C10 -20 13 -30 13 -32C3 -32 0 -26 0 -20" fill="${c}" opacity=".8"/>`;
+  if (k === "star") g = `<path d="M0 -30 L4 -18 L16 -16 L6 -9 L9 3 L0 -4 L-9 3 L-6 -9 L-16 -16 L-4 -18 Z" fill="${c}" opacity=".85"/>`;
+  return `<g transform="translate(${x},${y})" opacity="${o}">${g}</g>`;
+}
+function gardenHTML() {
+  const real = store.get("mf-garden", []);
+  const demo = real.length === 0;
+  const items = demo ? [{ suit: "spade" }, { suit: "heart" }, { suit: "diamond" }, { suit: "club" }] : real.slice(-24);
+  const W = 520, perRow = 8, H = Math.max(1, Math.ceil(items.length / perRow)) * 56 + 14;
+  const plants = items.map((p, i) => plantSVG(p, 34 + (i % perRow) * 64, 48 + Math.floor(i / perRow) * 56, demo)).join("");
+  const ground = Array.from({ length: Math.ceil(items.length / perRow) || 1 }, (_, r) =>
+    `<path d="M8 ${50 + r * 56}H${W - 8}" stroke="var(--line)" stroke-dasharray="2 5"/>`).join("");
+  return `<div class="garden">
+    <div class="label">心境花園 ${demo ? '<span class="hint">（示範：完成第一段旅程後，這裡會長出你的第一株）</span>' : `<span class="hint">${real.length} 次停下來</span>`}</div>
+    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="心境花園，每一次練習種下一株">${ground}${plants}</svg>
+    <div class="legend">${Object.entries(SUITS).map(([k, s]) => `<span style="--c:var(--${k})">${s.sym} ${s.name}</span>`).join("")}</div>
+    <p class="hint">花園不計連續天數，也不比較誰種得多。每一次停下來，都會留下一株。</p>
+  </div>`;
+}
+
+/* ---------- 畫面 ---------- */
+const V = {};
+V.home = () => `
+  <div class="block">
+    <p class="eyebrow">a pause for the weather inside</p>
+    <h1>此刻，你的心是什麼天氣？</h1>
+    <p class="lead">一段 1 到 5 分鐘的小旅程：看看心裡的天氣，抽一張牌，選一條練習小徑，回來後把這次的覺察種進花園。</p>
+  </div>
+  ${gardenHTML()}
+  <div class="actions"><button class="btn" data-go="weather">開始一段旅程</button></div>`;
+
+V.weather = () => `
+  <div class="block"><p class="eyebrow">Stop</p><h2>先停一下。心裡現在是什麼天氣？</h2></div>
+  <div class="weather">${WEATHER.map((w) => `<button class="wx" data-wx="${w.id}" aria-pressed="${S.weather === w.id}"><svg viewBox="0 0 40 32">${w.svg}</svg>${w.name}</button>`).join("")}</div>
+  <div class="scale"><label class="label" for="before">風浪有多大？</label>
+    <div class="scale-row"><input type="range" id="before" min="0" max="10" value="${S.before}"><output id="beforeOut">${S.before}</output></div>
+    <div class="ends"><span>0 平靜無波</span><span>10 大浪</span></div></div>
+  <div class="scale"><label class="label" for="clarity">你對自己此刻的狀態，看得有多清楚？</label>
+    <div class="scale-row"><input type="range" id="clarity" min="0" max="10" value="${S.clarityBefore}"><output id="clarityOut">${S.clarityBefore}</output></div>
+    <div class="ends"><span>0 一片模糊</span><span>10 非常清楚</span></div></div>
+  <div class="actions"><button class="btn" data-go="context" ${S.weather ? "" : "disabled"}>下一站</button><button class="btn quiet" data-go="home">回到花園</button></div>`;
+
+V.context = () => `
+  <div class="block"><p class="eyebrow">Notice</p><h2>是什麼帶來這場天氣？</h2></div>
+  <div class="block"><span class="label">選一個最接近的</span>
+    <div class="chips">${SITU.map((s) => `<button class="chip" data-situ="${s.id}" aria-pressed="${S.situ === s.id}">${s.name}</button>`).join("")}</div></div>
+  <div class="block"><span class="label">你有多少時間？</span>
+    <div class="chips">${[1, 3, 5, 10].map((t) => `<button class="chip" data-time="${t}" aria-pressed="${S.time === t}">${t} 分鐘</button>`).join("")}</div></div>
+  <div class="block"><span class="label">眼睛</span>
+    <div class="chips"><button class="chip" data-eyes="any" aria-pressed="${S.eyes === "any"}">都可以</button><button class="chip" data-eyes="open" aria-pressed="${S.eyes === "open"}">想睜著眼</button></div></div>
+  <div class="block"><label class="label" for="note">想多說一點嗎？（選填）</label>
+    <textarea id="note" placeholder="寫下此刻的念頭或身體感覺。這段文字不會被保存。">${esc(S.note)}</textarea></div>
+  <div class="actions"><button class="btn" id="toDraw" ${S.situ ? "" : "disabled"}>抽一張牌</button><button class="btn quiet" data-go="weather">上一站</button></div>`;
+
+V.draw = () => {
+  const p = S.picked ? card(S.picked) : null;
+  return `
+  <div class="block"><p class="eyebrow">Draw</p><h2>${p ? "這張牌陪你走這一段" : "憑直覺，翻開一張"}</h2>
+  ${p ? "" : `<p class="lead">三張牌來自「${esc(SITU.find((s) => s.id === S.situ).name)}」的牌組，沒有好牌壞牌。</p>`}</div>
+  ${p ? `<div class="reveal"><img src="${IMG}${pad(p.no)}.jpg" alt="${esc(p.title)}">
+      <div class="block"><span class="tag">${SUITS[p.suit].sym} ${SUITS[p.suit].name}｜今天的態度：${attitudeOf(p)}</span>
+      <h2>${esc(p.title)}</h2><p class="affirm">「${esc(p.affirmation)}」</p><p class="hint">${esc(p.action)}</p></div></div>
+      <div class="actions"><button class="btn" data-go="choose">選一條練習小徑</button></div>`
+  : `<div class="draw">${S.pool.map((no) => `<button class="card" data-card="${no}" aria-label="翻開這張牌"><img src="${IMG}back.jpg" alt=""><img class="front" src="${IMG}${pad(no)}.jpg" alt=""></button>`).join("")}</div>`}`;
+};
+
+V.choose = () => {
+  const sit = SITU.find((s) => s.id === S.situ);
+  const opts = recommend();
+  return `
+  <div class="block"><p class="eyebrow">Choose a path</p><h2>${esc(sit.ask)}</h2>
+  <p class="lead">兩條小徑都可以。如果練到一半不舒服，隨時可以停。</p></div>
+  <div class="paths">${opts.map((o) => { const pr = PRACTICE[o.id]; return `
+    <button class="opt" data-pr="${o.id}" data-min="${o.mins}" aria-pressed="${S.practice === o.id}">
+      <b>${pr.name}</b><span>${pr.desc}</span><span class="meta">${o.mins} 分鐘｜${S.eyes === "open" ? "睜眼" : pr.eyes}${o.why ? "｜" + o.why : ""}</span></button>`; }).join("")}</div>
+  <div class="actions"><button class="btn" id="startPr" ${S.practice ? "" : "disabled"}>開始練習</button><button class="btn quiet" data-go="draw">回到牌卡</button></div>`;
+};
+
+V.practice = () => {
+  const pr = PRACTICE[S.practice];
+  return `
+  <div class="block"><p class="eyebrow">Practice</p><h2>${pr.name}</h2></div>
+  <div class="ring-wrap"><div class="ring"><span class="time" id="clock">${S.mins}:00</span></div></div>
+  <p class="hint" style="text-align:center">光圈只是安靜的陪伴，不需要跟著它呼吸。</p>
+  <p class="guide" id="guide">${pr.steps[0]}</p>
+  <div class="progress"><i id="bar"></i></div>
+  <div class="actions"><button class="btn ghost" id="pause">暫停</button><button class="btn ghost" id="stopPr">我想停下來</button><button class="btn quiet" id="skip">示範：快轉到結束</button></div>`;
+};
+
+V.reflect = () => {
+  const p = card(S.picked);
+  return `
+  <div class="block"><p class="eyebrow">Return</p><h2>回來了。現在的天氣呢？</h2></div>
+  <div class="scale"><label class="label" for="after">風浪有多大？<span class="hint">（出發時是 ${S.before}）</span></label>
+    <div class="scale-row"><input type="range" id="after" min="0" max="10" value="${S.after ?? S.before}"><output id="afterOut">${S.after ?? S.before}</output></div></div>
+  <div class="scale"><label class="label" for="clarity2">看得有多清楚？<span class="hint">（出發時是 ${S.clarityBefore}）</span></label>
+    <div class="scale-row"><input type="range" id="clarity2" min="0" max="10" value="${S.clarityAfter ?? S.clarityBefore}"><output id="clarity2Out">${S.clarityAfter ?? S.clarityBefore}</output></div></div>
+  <div class="block"><span class="label">這段練習對你來說……</span>
+    <div class="chips">${["有幫助", "沒什麼變化", "更不舒服"].map((f) => `<button class="chip" data-feel="${f}" aria-pressed="${S.feel === f}">${f}</button>`).join("")}</div></div>
+  <div class="block"><span class="label">有遇到困難嗎？（可複選，可不選）</span>
+    <div class="chips">${["太長", "太快", "不喜歡閉眼", "注意呼吸不舒服", "環境干擾"].map((d) => `<button class="chip" data-diff="${d}" aria-pressed="${S.diff.includes(d)}">${d}</button>`).join("")}</div></div>
+  <div class="block note"><span class="label">牌卡想問你</span><p class="affirm">${esc(p.question)}</p>
+    <textarea id="answer" placeholder="想寫就寫，不寫也可以。這段文字不會被保存。"></textarea></div>
+  <div class="actions"><button class="btn" id="harvest" ${S.feel ? "" : "disabled"}>收進花園</button></div>`;
+};
+
+V.harvest = () => `
+  <div class="block"><p class="eyebrow">Harvest</p><h2>${esc(S.result.title)}</h2><p>${esc(S.result.body)}</p>
+  ${S.result.next ? `<p class="note">${esc(S.result.next)}</p>` : ""}</div>
+  ${gardenHTML()}
+  <div class="actions"><button class="btn" data-go="home">完成</button><button class="btn ghost" id="again">再走一段</button></div>`;
+
+V.ground = () => `
+  <div class="block"><p class="eyebrow">Ground first</p><h2>風浪很大。先一起落地。</h2>
+  <p>現在不抽牌，也不做長的練習。睜著眼睛，感受雙腳踩在地面，或身體靠著椅子的地方。說出你眼前看到的三樣東西。</p></div>
+  <div class="reveal"><img src="${IMG}01.jpg" alt="落地的錨"><div class="block"><h2>落地的錨</h2><p class="affirm">「${esc(card(1).affirmation)}」</p></div></div>
+  <div class="block"><span class="label">我想確認一下，你現在安全嗎？</span>
+  <div class="actions"><button class="btn" id="safeYes">我是安全的，想做一分鐘接地</button><button class="btn ghost" id="safeNo">我不確定，或不安全</button></div></div>
+  <p class="hint">如果身邊有可以信任的人，現在也是聯絡他們的好時機。</p>`;
+
+V.check = () => `
+  <div class="block"><p class="eyebrow">Check in</p><h2>你提到撐不下去了，我想先確認你的安全。</h2>
+  <p>你現在安全嗎？有沒有想傷害自己的念頭？</p></div>
+  <div class="actions"><button class="btn" id="okTired">我是安全的，只是很累</button><button class="btn ghost" id="notOk">我不確定，或有這樣的念頭</button></div>`;
+
+V.crisis = () => `
+  <div class="safe">
+    <h2>謝謝你告訴我。我們先把旅程停下來。</h2>
+    <p>你現在安全嗎？如果你有立即的危險，請先撥打 110 或 119。身邊有沒有可以馬上聯絡的人？</p>
+    <div class="lines">${linesHTML()}</div>
+    <p class="hint">原型示範：正式版中，若你事先同意，系統也會通知你指定的老師或窗口，只告知「可能需要關心」，不會傳送你寫的內容。這個通知不是緊急救援。</p>
+    <div class="actions"><button class="btn ghost" data-go="home">回到花園</button></div>
+  </div>`;
+
+function linesHTML() {
+  return RESOURCES.map(([n, name, d]) => `<div class="line"><b>${n}</b><span><span class="label">${name}</span><br><span class="hint">${d}</span></span></div>`).join("");
+}
+function attitudeOf(c) { return ATTITUDE_BY_CARD[c.no] || ATTITUDE_BY_SUIT[c.suit]; }
+
+/* ---------- 規則 ---------- */
+function fitMins(pr, want, cap) {
+  const ok = PRACTICE[pr].times.filter((t) => t <= Math.min(want, cap));
+  return ok.length ? Math.max(...ok) : null;
+}
+function recommend() {
+  const sit = SITU.find((s) => s.id === S.situ);
+  const prefs = store.get("mf-prefs", {});
+  const cap = S.before >= 7 ? 3 : 10;           // 規範 7：≥7 只給 1–3 分鐘
+  let list = [...sit.rec];
+  const why = {};
+  if (prefs.avoidBreath) list = list.map((id) => (id === "M01" ? ((why.M03 = "上次注意呼吸不舒服，換成聲音"), "M03") : id)); // R04
+  if (S.before >= 7) list = list.map((id) => (["M04", "M03", "A02", "M01"].includes(id) ? ((why.M02 = "風浪較大，先從睜眼接地開始"), "M02") : id));
+  const out = [];
+  for (let id of list) {
+    let m = fitMins(id, S.time, cap);
+    if (m == null) { why.M02 = why.M02 || "配合你的時間"; id = "M02"; m = fitMins("M02", S.time, cap) || 1; }
+    if (!out.find((o) => o.id === id)) out.push({ id, mins: m, why: why[id] });
+  }
+  if (out.length < 2) { const alt = out[0].id === "A01" ? "M06" : "A01"; out.push({ id: alt, mins: fitMins(alt, S.time, cap) || 1 }); }
+  return out.slice(0, 2);
+}
+function scan(t) {
+  if (CRISIS.some((k) => t.includes(k))) return "crisis";
+  if (UNSURE.some((k) => t.includes(k))) return "check";
+  if (DISSOC.some((k) => t.includes(k))) return "ground";
+  return null;
+}
+function evaluate() {
+  const prefs = store.get("mf-prefs", { helpful: {}, worse: 0 });
+  prefs.helpful = prefs.helpful || {};
+  let title = "這一次，你停下來了", body = "", next = "";
+  const dW = S.after - S.before, dC = S.clarityAfter - S.clarityBefore;
+  if (S.feel === "更不舒服") {
+    prefs.worse = (prefs.worse || 0) + 1;
+    title = "謝謝你誠實地說";
+    body = "練習讓你更不舒服時，停下來或換一個方式都是對的。";
+    next = prefs.worse >= 2 ? "這是連續第二次覺得更不舒服。建議找課程老師聊聊，一起看看適合你的練習。" : "下一次，我們換一個注意的焦點。";
+  } else {
+    prefs.worse = 0;
+    if (dW >= 0 && dC > 0) body = "風浪沒有變小，但你看得更清楚了。看清楚此刻的天氣，就是一次完整的練習。";   // R07
+    else if (dW < 0) body = `風浪從 ${S.before} 變成 ${S.after}。除了分數，也記得你在練習中注意到的事。`;
+    else body = "天氣沒什麼變化，也沒關係。練習不是為了把情緒消掉，而是看見它。";
+    if (S.feel === "有幫助") {
+      prefs.helpful[S.practice] = (prefs.helpful[S.practice] || 0) + 1;
+      if (prefs.helpful[S.practice] >= 2) next = `「${PRACTICE[S.practice].name}」已經兩次對你有幫助，下次可以繼續用它。`;   // R06
+    }
+  }
+  if (S.diff.includes("注意呼吸不舒服")) { prefs.avoidBreath = true; next = next || "之後不會預設用呼吸當錨點，會先給你腳底、聲音或視覺。"; }  // R04
+  if (S.diff.includes("不喜歡閉眼")) prefs.eyesOpen = true;   // R05
+  if (S.diff.includes("太長") && !next) next = "下次同一個練習，我們縮短時間。";   // R03
+  store.set("mf-prefs", prefs);
+  const g = store.get("mf-garden", []);
+  g.push({ suit: card(S.picked).suit, d: new Date().toISOString().slice(0, 10), pr: S.practice, b: S.before, a: S.after, cb: S.clarityBefore, ca: S.clarityAfter, f: S.feel });
+  store.set("mf-garden", g);
+  S.result = { title, body, next };
+}
+
+/* ---------- 流程 ---------- */
+function go(screen) {
+  stopTimer();
+  S.screen = screen;
+  if (screen === "home") S = { ...fresh(), screen: "home" };
+  if (screen === "home" || screen === "weather" || screen === "context" || screen === "crisis" || screen === "check" || screen === "ground") setSuit(screen === "crisis" ? "heart" : null);
+  render();
+  if (EMBED) { try { window.frameElement && window.frameElement.scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) {} }
+  else window.scrollTo({ top: 0, behavior: "smooth" });
+}
+function render() {
+  if (S.screen === "home" && store.get("mf-prefs", {}).eyesOpen) S.eyes = "open";
+  $("#app").innerHTML = V[S.screen]();
+  renderPath();
+  bind();
+  if (S.screen === "practice") startTimer();
+}
+function stopTimer() { if (timer) { clearInterval(timer.id); timer = null; } }
+function startTimer() {
+  const pr = PRACTICE[S.practice];
+  const total = S.mins * 60;
+  timer = { left: total, paused: false, id: null };
+  const tick = () => {
+    if (timer.paused) return;
+    timer.left = Math.max(0, timer.left - 1);
+    const done = total - timer.left;
+    const idx = Math.min(pr.steps.length - 1, Math.floor((done / total) * pr.steps.length));
+    const g = $("#guide"); if (g && g.textContent !== pr.steps[idx]) g.textContent = pr.steps[idx];
+    const c = $("#clock"); if (c) c.textContent = `${Math.floor(timer.left / 60)}:${pad(timer.left % 60)}`;
+    const b = $("#bar"); if (b) b.style.width = `${(done / total) * 100}%`;
+    if (timer.left === 0) { stopTimer(); go("reflect"); }
+  };
+  timer.id = setInterval(tick, 1000);
+}
+function bind() {
+  document.querySelectorAll("[data-go]").forEach((b) => b.onclick = () => go(b.dataset.go));
+  document.querySelectorAll("[data-wx]").forEach((b) => b.onclick = () => {
+    S.weather = b.dataset.wx; S.before = WEATHER.find((w) => w.id === S.weather).v; render(); });
+  const sl = (id, key, out) => { const el = $("#" + id); if (el) el.oninput = () => { S[key] = +el.value; $("#" + out).textContent = el.value; }; };
+  sl("before", "before", "beforeOut"); sl("clarity", "clarityBefore", "clarityOut");
+  sl("after", "after", "afterOut"); sl("clarity2", "clarityAfter", "clarity2Out");
+  document.querySelectorAll("[data-situ]").forEach((b) => b.onclick = () => { S.note = $("#note").value; S.situ = b.dataset.situ; render(); });
+  document.querySelectorAll("[data-time]").forEach((b) => b.onclick = () => { S.note = $("#note").value; S.time = +b.dataset.time; render(); });
+  document.querySelectorAll("[data-eyes]").forEach((b) => b.onclick = () => { S.note = $("#note").value; S.eyes = b.dataset.eyes; render(); });
+  const toDraw = $("#toDraw");
+  if (toDraw) toDraw.onclick = () => {
+    S.note = $("#note").value;
+    const route = scan(S.note);
+    S.note = "";   // 不保存使用者文字
+    if (route) return go(route);
+    if (S.before >= 8) return go("ground");     // 規範 9：B 類
+    const pool = [...SITU.find((s) => s.id === S.situ).pool].sort(() => Math.random() - 0.5).slice(0, 3);
+    S.pool = pool; S.picked = null; go("draw");
+  };
+  document.querySelectorAll("[data-card]").forEach((b) => b.onclick = () => {
+    const no = +b.dataset.card;
+    b.classList.add("flip");
+    document.querySelectorAll("[data-card]").forEach((o) => { if (o !== b) o.classList.add("fade"); });
+    setSuit(card(no).suit);
+    setTimeout(() => { S.picked = no; render(); }, 900);
+  });
+  document.querySelectorAll("[data-pr]").forEach((b) => b.onclick = () => { S.practice = b.dataset.pr; S.mins = +b.dataset.min; render(); });
+  const sp = $("#startPr"); if (sp) sp.onclick = () => go("practice");
+  const pa = $("#pause"); if (pa) pa.onclick = () => { timer.paused = !timer.paused; pa.textContent = timer.paused ? "繼續" : "暫停"; };
+  const st = $("#stopPr"); if (st) st.onclick = () => { stopTimer(); go("reflect"); };
+  const sk = $("#skip"); if (sk) sk.onclick = () => { stopTimer(); go("reflect"); };
+  document.querySelectorAll("[data-feel]").forEach((b) => b.onclick = () => { keepSliders(); S.feel = b.dataset.feel; render(); });
+  document.querySelectorAll("[data-diff]").forEach((b) => b.onclick = () => {
+    keepSliders(); const d = b.dataset.diff; S.diff = S.diff.includes(d) ? S.diff.filter((x) => x !== d) : [...S.diff, d]; render(); });
+  const hv = $("#harvest"); if (hv) hv.onclick = () => {
+    keepSliders();
+    const ans = $("#answer").value;
+    if (scan(ans) === "crisis") return go("crisis");
+    if (scan(ans) === "check") return go("check");
+    evaluate(); go("harvest");
+  };
+  const ag = $("#again"); if (ag) ag.onclick = () => { S = fresh(); go("weather"); };
+  const sy = $("#safeYes"); if (sy) sy.onclick = () => { S.situ = S.situ || "S00"; S.pool = [1]; S.picked = 1; S.practice = "M02"; S.mins = 1; setSuit("spade"); go("practice"); };
+  const sn = $("#safeNo"); if (sn) sn.onclick = () => go("crisis");
+  const ot = $("#okTired"); if (ot) ot.onclick = () => go("ground");
+  const no = $("#notOk"); if (no) no.onclick = () => go("crisis");
+}
+function keepSliders() {
+  const a = $("#after"), c = $("#clarity2");
+  if (a) S.after = +a.value; if (c) S.clarityAfter = +c.value;
+}
+
+$("#helpLines").innerHTML = linesHTML();
+$("#helpBtn").onclick = () => { const d = $("#helpDlg"); d.showModal ? d.showModal() : d.setAttribute("open", ""); };
+$("#helpClose").onclick = () => { const d = $("#helpDlg"); d.close ? d.close() : d.removeAttribute("open"); };
+
+function start(data) {
+  if (data && data.S) { S = { ...fresh(), ...data.S }; if (S.screen === "practice") S.screen = "choose"; }
+  if (S.picked) setSuit(card(S.picked).suit);
+  render();
+}
+// 嵌入時讓 iframe 高度跟著內容走（同源 iframe 才能調整，失敗時維持 Streamlit 給的高度並可捲動）
+if (EMBED) {
+  const fit = () => { try { const f = window.frameElement; if (f) f.style.height = Math.max(640, document.documentElement.scrollHeight + 8) + "px"; } catch (e) {} };
+  try { new ResizeObserver(fit).observe(document.body); } catch (e) {}
+  window.addEventListener("load", fit);
+  fit();
+}
+window.claude?.hot?.snapshot?.(() => ({ S }));
+window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
+</script>
